@@ -20,8 +20,8 @@ Build a map-based application, which lets the user see geo-based data on a map a
 
 Fork this repository and fill in (either in English, or in Slovak):
 
-**Application description**: `<fill in>`
+**Application description**: `Web application that allows to search for biking routes according to user preferences. User is able to find routes that run through forests or are near river or historical sight.`
 
-**Data source**: `<fill in>`
+**Data source**: `openstreetmap.org`
 
-**Technologies used**: `<fill in>`
+**Technologies used**: `rails, postgres, mapbox`
