@@ -15,4 +15,10 @@ class HomeController < ApplicationController
 
   end
 
+  def all_hist
+
+    render json: PostGis.all_historic
+
+  end
+
 end

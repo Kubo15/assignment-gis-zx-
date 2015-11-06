@@ -8,7 +8,9 @@ Rails.application.routes.draw do
 
   get 'test' => 'home#test_query'
 
-   get 'routes/all' => 'home#all_routes'
+  get 'routes/all' => 'home#all_routes'
+
+  get 'hist/all' => 'home#all_hist'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

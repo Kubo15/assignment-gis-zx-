@@ -14,4 +14,15 @@ class PostGis
 
   end
 
+  def self.all_historic
+
+    q = "select ST_AsGeoJSON(ST_Transform(way,4326)) as data, name
+	from planet_osm_point
+	where (tourism = 'viewpoint' or historic is not null)
+	and name is not null"
+
+    results = ActiveRecord::Base.connection.execute(q)
+
+  end
+
 end
