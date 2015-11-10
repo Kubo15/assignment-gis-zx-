@@ -20,7 +20,7 @@ var MapBoxHelper = function ( map ) {
         },
 
         lineAllLayer : {
-            "color": "#00a9a9",
+            "color": "#4F7380",
             "weight": 1.59,
             "opacity": 0.7
         }
@@ -41,7 +41,7 @@ MapBoxHelper.prototype._getDefaultName = function (){
 MapBoxHelper.prototype.addLayer = function ( layer, layerName = this._getDefaultName() ) {
 
     layer.addTo( this._map );
-    this._layers[layerName] = layer;
+    this._layers[ layerName ] = layer;
 
 };
 
