@@ -5,6 +5,7 @@ var MenuHelper = function ( mapHelper, formatter ) {
 
     this._mapHelper = mapHelper;
     this._formatter = formatter;
+    this._lastLatLng = undefined;
 
 };
 
@@ -37,10 +38,16 @@ MenuHelper.prototype.initMenu = function () {
 
     }.bind(this));
 
+    $("#menu-near").click(function(){
+
+        menuHelper.postLatLng();
+
+    });
+
 
 };
 
-MenuHelper.prototype.addRoutes = function (res) {
+MenuHelper.prototype.addRoutes = function (res, style = this._mapHelper.styles.lineAllLayer) {
 
     var s = [];
 
@@ -50,7 +57,7 @@ MenuHelper.prototype.addRoutes = function (res) {
 
     }
 
-    var lay = L.geoJson(s, { style: this._mapHelper.styles.lineAllLayer });
+    var lay = L.geoJson(s, { style: style  });
     this._mapHelper.addLayer(lay);
 
 };
@@ -109,6 +116,34 @@ MenuHelper.prototype.showLatLng = function ( latlng ) {
         }
     });
 
+    this._lastLatLng = latlng;
+
     this._mapHelper.addLayer( layer, "lastClick" );
 
+};
+
+
+MenuHelper.prototype.postLatLng = function (latLng = this._lastLatLng) {
+
+    if( latLng !== undefined ) {
+
+        $.ajax({
+
+            url: "routes/near",
+            method: "post",
+            data: {
+                position: { lat: latLng.lat, long: latLng.lng, dist: 150 }
+            }
+
+        }).done(
+
+            function ( res ) {
+
+                this.addRoutes(res, this._mapHelper.styles.lineRedLayer );
+
+            }.bind(this)
+
+        );
+
+    }
 };

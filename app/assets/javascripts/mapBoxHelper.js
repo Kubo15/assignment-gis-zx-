@@ -23,6 +23,11 @@ var MapBoxHelper = function ( map ) {
             "color": "#4F7380",
             "weight": 1.59,
             "opacity": 0.7
+        },
+        lineRedLayer : {
+            "color": "#FF0000",
+            "weight": 1.59,
+            "opacity": 0.7
         }
 
     };

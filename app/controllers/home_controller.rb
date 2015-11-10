@@ -21,4 +21,16 @@ class HomeController < ApplicationController
 
   end
 
+  def near_routes
+
+    render json: PostGis.near_routes( pos_params )
+
+  end
+
+  private
+
+    def pos_params
+      params.require(:position).permit(:lat, :long, :dist)
+    end
+
 end
