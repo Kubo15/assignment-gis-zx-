@@ -183,6 +183,7 @@ MenuHelper.prototype.postParams = function () {
         data: data
     }).done( function ( res ) {
 
+        console.log(res);
         this.addRoutes(res, this._mapHelper.styles.lineRedLayer );
 
     }.bind(this) );

@@ -85,11 +85,16 @@ class PostGis
 
   def self.comp_routes( comp_params )
 
-    if comp_params[:forest][:checked]
+    f =  @@raw_con.exec_prepared('forest_ways') if comp_params[:forest][:checked]
+    w =  @@raw_con.exec_prepared('water_ways',[comp_params[:water][:dist]]) if comp_params[:water][:checked] == "true"
+    h =  @@raw_con.exec_prepared('hist_ways',[comp_params[:historical][:dist]]) if comp_params[:historical][:checked] == "true"
 
-      puts @@raw_con.exec_prepared('forest_ways')
+    res = f
 
-    end
+    res = Hash[ f.to_a & w.to_a ] unless w.nil?
+    res = Hash[ res.to_a & h.to_a ] unless h.nil?
+
+    res
 
   end
 
