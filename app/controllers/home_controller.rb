@@ -29,7 +29,7 @@ class HomeController < ApplicationController
 
   def comp_routes
 
-    render PostGis.comp_routes( comp_params )
+    render json: PostGis.comp_routes( comp_params )
 
   end
 

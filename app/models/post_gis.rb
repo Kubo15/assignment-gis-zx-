@@ -30,14 +30,14 @@ class PostGis
 
   @@raw_con.prepare(
       'forest_ways',
-      'select r.osm_id as id, ST_AsGeoJSON(ST_Transform(r.way,4326)) as data from forests
+      'select ST_AsGeoJSON(ST_Transform(r.way,4326)) as data from forests
 	      cross join routes as r
         where  (ST_Touches(r.way,forests.way))'
   )
 
   @@raw_con.prepare(
       'water_ways',
-      'select r.osm_id as id, ST_AsGeoJSON(ST_Transform(r.way,4326)) as data from routes as r
+      'select ST_AsGeoJSON(ST_Transform(r.way,4326)) as data from routes as r
 	      cross join waters as w
 	      where ST_DWithin(
 	        ST_Transform(w.way,4326)::geography,
@@ -47,7 +47,7 @@ class PostGis
 
   @@raw_con.prepare(
       'hist_ways',
-      'select r.osm_id as id, ST_AsGeoJSON(ST_Transform(r.way,4326)) as data from routes as r
+      'select ST_AsGeoJSON(ST_Transform(r.way,4326)) as data from routes as r
 	        cross join viewpoints as v
 	        where ST_DWithin(
 	          ST_Transform(v.way,4326)::geography,
@@ -85,17 +85,21 @@ class PostGis
 
   def self.comp_routes( comp_params )
 
-    f =  @@raw_con.exec_prepared('forest_ways') if comp_params[:forest][:checked]
-    w =  @@raw_con.exec_prepared('water_ways',[comp_params[:water][:dist]]) if comp_params[:water][:checked] == "true"
-    h =  @@raw_con.exec_prepared('hist_ways',[comp_params[:historical][:dist]]) if comp_params[:historical][:checked] == "true"
+    f =  @@raw_con.exec_prepared('forest_ways') if comp_params[:forest][:checked] === "true"
+    w =  @@raw_con.exec_prepared('water_ways',[comp_params[:water][:dist]]) if comp_params[:water][:checked] === "true"
+    h =  @@raw_con.exec_prepared('hist_ways',[comp_params[:historical][:dist]]) if comp_params[:historical][:checked] === "true"
 
-    res = f
+    res = f.to_a
+    res = w.to_a if f.nil?
+    res = h.to_a if f.nil? and w.nil?
 
-    res = Hash[ f.to_a & w.to_a ] unless w.nil?
-    res = Hash[ res.to_a & h.to_a ] unless h.nil?
+    res = res & w.to_a  unless w.nil? or f.nil?
+    res = res & h.to_a  unless h.nil? or (w.nil? and f.nil?)
 
     res
 
   end
+
+
 
 end
