@@ -28,6 +28,20 @@ class PostGis
               $3 )"
   )
 
+  @@raw_con.prepare(
+      'forest_ways',
+      'select routes.way from forests
+	      cross join routes
+        where  (ST_Touches(routes.way,forests.way))'
+  )
+
+  @@raw_con.prepare(
+      'forest_ways',
+      'select routes.way from forests
+	      cross join routes
+        where  (ST_Touches(routes.way,forests.way))'
+  )
+
   def self.test_query
 
     query = "select * from planet_osm_line limit 100"
