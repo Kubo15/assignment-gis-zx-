@@ -25,7 +25,8 @@ class PostGis
             and ST_DWithin(
               ST_Transform(way,4326)::geography,
               ST_SetSRID(ST_Point($1, $2),4326)::geography,
-              $3 );")
+              $3 )"
+  )
 
   def self.test_query
 
@@ -36,13 +37,13 @@ class PostGis
 
   def self.all_routes
 
-    @@raw_con.exec_prepared('all_routes',['bicycle','yes'])
+    @@raw_con.exec_prepared 'all_routes', ['bicycle','yes']
 
   end
 
   def self.all_historic
 
-    @@raw_con.exec_prepared('all_hist')
+    @@raw_con.exec_prepared 'all_hist'
 
   end
 
@@ -50,7 +51,7 @@ class PostGis
 
     @@raw_con.exec_prepared(
         'near_routes',
-        [ pos_params[:long],pos_params[:lat],pos_params[:dist]]
+        [ pos_params[:long], pos_params[:lat], pos_params[:dist] ]
     )
 
   end
