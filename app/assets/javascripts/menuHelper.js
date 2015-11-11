@@ -45,6 +45,13 @@ MenuHelper.prototype.initMenu = function () {
     });
 
 
+    $("#menu-params").click(function(){
+
+        menuHelper.postParams();
+
+    });
+
+
 };
 
 MenuHelper.prototype.addRoutes = function (res, style = this._mapHelper.styles.lineAllLayer) {
@@ -146,4 +153,38 @@ MenuHelper.prototype.postLatLng = function (latLng = this._lastLatLng) {
         );
 
     }
+};
+
+MenuHelper.prototype.postParams = function () {
+
+    var data = {
+
+        data : {
+
+            forest: {
+                checked : $("#checkbox-forest").prop('checked')
+            },
+            water: {
+                checked : $("#checkbox-water").prop('checked'),
+                dist: $("#dist-water").val()
+            },
+            historical: {
+                checked : $("#checkbox-hist").prop('checked'),
+                dist: $("#dist-hist").val()
+            }
+
+        }
+
+    };
+
+    $.ajax({
+        url: 'routes/comp',
+        method: 'post',
+        data: data
+    }).done( function ( res ) {
+
+        this.addRoutes(res, this._mapHelper.styles.lineRedLayer );
+
+    }.bind(this) );
+
 };

@@ -27,10 +27,24 @@ class HomeController < ApplicationController
 
   end
 
+  def comp_routes
+
+    render PostGis.comp_routes( comp_params )
+
+  end
+
   private
 
     def pos_params
       params.require(:position).permit(:lat, :long, :dist)
+    end
+
+    def comp_params
+      params.require(:data).permit(
+          forest:[:checked],
+          water: [:checked,:dist],
+          historical: [:checked,:dist]
+      )
     end
 
 end

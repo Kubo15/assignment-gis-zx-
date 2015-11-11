@@ -10,5 +10,7 @@ Rails.application.routes.draw do
 
   post 'routes/near' => 'home#near_routes'
 
+  post 'routes/comp' => 'home#comp_routes'
+
 
 end
