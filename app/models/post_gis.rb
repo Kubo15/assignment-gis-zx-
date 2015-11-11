@@ -30,16 +30,29 @@ class PostGis
 
   @@raw_con.prepare(
       'forest_ways',
-      'select routes.way from forests
-	      cross join routes
-        where  (ST_Touches(routes.way,forests.way))'
+      'select r.osm_id as id, ST_AsGeoJSON(ST_Transform(r.way,4326)) as data from forests
+	      cross join routes as r
+        where  (ST_Touches(r.way,forests.way))'
   )
 
   @@raw_con.prepare(
-      'forest_ways',
-      'select routes.way from forests
-	      cross join routes
-        where  (ST_Touches(routes.way,forests.way))'
+      'water_ways',
+      'select r.osm_id as id, ST_AsGeoJSON(ST_Transform(r.way,4326)) as data from routes as r
+	      cross join waters as w
+	      where ST_DWithin(
+	        ST_Transform(w.way,4326)::geography,
+	        ST_Transform(r.way,4326)::geography,
+	        $1 )'
+  )
+
+  @@raw_con.prepare(
+      'hist_ways',
+      'select r.osm_id as id, ST_AsGeoJSON(ST_Transform(r.way,4326)) as data from routes as r
+	        cross join viewpoints as v
+	        where ST_DWithin(
+	          ST_Transform(v.way,4326)::geography,
+	          ST_Transform(r.way,4326)::geography,
+	          $1 )'
   )
 
   def self.test_query
@@ -70,9 +83,13 @@ class PostGis
 
   end
 
-  def self.PostGis( comp_routes )
+  def self.comp_routes( comp_params )
 
-    
+    if comp_params[:forest][:checked]
+
+      puts @@raw_con.exec_prepared('forest_ways')
+
+    end
 
   end
 
